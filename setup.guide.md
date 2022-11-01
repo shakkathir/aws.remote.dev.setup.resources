@@ -11,22 +11,22 @@
 		unzip awscliv2.zip
 		sudo ./aws/install
 
+	## Steps
+		0] login to SSO managemnt console.
 
-## Steps
-	0] login to SSO managemnt console.
-
-	1] setup or modify a temp profile in sso login page to
-			C:\Users\Shak Kathirvel\.aws\credentials
-			C:\Users\Shak Kathirvel\.aws\config
-		from aws admin console after sso login
-
-	[ aws credentials check]
-		aws --version
-	    aws configure list
-		aws configure list-profiles
-		aws --profile 967655172285_ie_dev_AdministratorAccess sts get-caller-identity
-		aws --profile 929292782238_tri-na_AdministratorAccess s3api list-buckets  
-		aws --profile 967655172285_ie_dev_AdministratorAccess s3 ls s3://tri-s3-encryption-report  --human-readable --summarize --page-size 1 
+		1] collect the temp creds in sso login page to
+				C:\Users\Shak Kathirvel\.aws\credentials
+				C:\Users\Shak Kathirvel\.aws\config
+		
+		do the creds check
+		
+		[ aws credentials check]
+			aws --version
+			aws configure list
+			aws configure list-profiles
+			aws --profile 967655172285_ie_dev_AdministratorAccess sts get-caller-identity
+			aws --profile 929292782238_tri-na_AdministratorAccess s3api list-buckets  
+			aws --profile 967655172285_ie_dev_AdministratorAccess s3 ls s3://tri-s3-encryption-report  --human-readable --summarize --page-size 1 
 	
 
 2] create a temp instance in account.us-east-1.vpc.privatesubnet
