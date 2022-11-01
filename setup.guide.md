@@ -77,7 +77,7 @@ The network configuration that will be used is represented below:
 ____
 
 ## Part 2
-   ** <span style="color:blue">.SSH over SSM</span> **
+   ** &lt;span style="color:blue"&gt;SSH over SSM&lt;/span&gt; **
 ###  OpenSSH toolset setup
 
 https://github.com/PowerShell/Win32-OpenSSH/releases/OpenSSH-Win64-v8.9.1.0.msi
