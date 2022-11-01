@@ -1,4 +1,4 @@
-### install notes created on 11/10/2021 creating a new machine in TRI IE-dev account 
+## Install notes created on 11/10/2021 creating a new machine in TRI IE-dev account 
 
 ### Local Laptop Setup 
 	### Install AWS CLI v2 or latest 
@@ -12,38 +12,22 @@
 		sudo ./aws/install
 
 
-0] login to SSO managemnt console.
+## Steps
+	0] login to SSO managemnt console.
 
-1] setup or modify a temp profile in sso login page to
-		C:\Users\Shak Kathirvel\.aws\credentials
-		C:\Users\Shak Kathirvel\.aws\config
-	from aws admin console after sso login
+	1] setup or modify a temp profile in sso login page to
+			C:\Users\Shak Kathirvel\.aws\credentials
+			C:\Users\Shak Kathirvel\.aws\config
+		from aws admin console after sso login
 
 	[ aws credentials check]
 		aws --version
+	    aws configure list
 		aws configure list-profiles
-		aws --profile 967655172285_ie_dev_AdministratorAccess s3api list-buckets 
-			aws --profile 967655172285_ie_dev_AdministratorAccess s3 ls s3://tri-s3-encryption-report  --human-readable --summarize --page-size 1 
+		aws --profile 967655172285_ie_dev_AdministratorAccess sts get-caller-identity
 		aws --profile 929292782238_tri-na_AdministratorAccess s3api list-buckets  
-	#remote-dev  | linux or windows latest CLI VERIFICATION 
-	  1 aws --version
-	   2 aws configure
-	   3 aws configure list
-	   4 aws configure help
-	   5 aws configure list-profiles
-	   6 aws configure get
-	   7 aws configure get help
-	   8 aws s3 ls s3://tri-aws-cur  --human-readable --summarize --page-size 1 --profile 929292782238_AdministratorAccess
-	   9 aws s3 ls s3://tri-aws-cur  --human-readable --summarize --page-size 1
-	  10 aws s3 ls s3://tri-aws-cur  --human-readable --summarize --page-size 1 --profile 929292782238_AdministratorAccess
-	  11 aws --version
-	  12 aws s3 ls s3://tri-aws-cur  --human-readable --summarize --page-size 1 967655172285_ie_dev_AdministratorAccess
-	  13 aws s3 ls s3://tri-aws-cur  --human-readable --summarize --page-size 1 --profile 967655172285_ie_dev_Administra...
-	  14 aws s3 ls s3://tri-aws-cur  --human-readable --summarize --page-size 1 --profile 967655172285_ie_dev_Administra...
-	  15 aws s3 help
-	  17 aws s3 ls help
-	  18 aws s3api list-buckets --profile 967655172285_ie_dev_AdministratorAccess
-
+		aws --profile 967655172285_ie_dev_AdministratorAccess s3 ls s3://tri-s3-encryption-report  --human-readable --summarize --page-size 1 
+	
 
 2] create a temp instance in account.us-east-1.vpc.privatesubnet
 	2.1] generate a pem file.
