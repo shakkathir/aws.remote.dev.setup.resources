@@ -1,4 +1,8 @@
-## Install notes created on 11/10/2021 creating a new machine in TRI IE-dev account 
+## Install notes created on 11/10/2021 
+## Install notes Updated on 2022-11-01
+
+## Overall Architecture 
+![SSH OVER ssm manager image](SSH OVER ssm manager (3).jpg)
 
 ### Local Laptop Setup 
 
