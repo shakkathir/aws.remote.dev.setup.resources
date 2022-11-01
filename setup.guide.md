@@ -256,7 +256,35 @@ Fatal error: Lost connection with the server
 
 c:\Tools\unison-v2.51.4_rc2\bin\unison.exe -testServer delme.json -servercmd /home/ubuntu/Tools/unison-v2.51.4_rc2/bin/unison ssh://i-0f1beb04ee3109b92/home/ubuntu/from_windows/project2/delme.json
 
-[unison] config that works 
+[ .unison profiles ]		
+	C:\Users\Shak Kathirvel>dir /b/s/d .unison
+	C:\Users\Shak Kathirvel\.unison\ar03fb67
+	C:\Users\Shak Kathirvel\.unison\ar51c1b0
+	C:\Users\Shak Kathirvel\.unison\default.prf
+	C:\Users\Shak Kathirvel\.unison\fp03fb67
+	C:\Users\Shak Kathirvel\.unison\fp51c1b0
+	C:\Users\Shak Kathirvel\.unison\profile001.prf
+	C:\Users\Shak Kathirvel\.unison\unison.log
+
+[unison] config that works C:\Users\Shak Kathirvel\.unison\profile001.prf
+
+	#copied from https://www.howtoforge.com/tutorial/unison-file-sync-between-two-servers-on-debian-10/
+	#refer also https://www.cis.upenn.edu/~bcpierce/unison/download/releases/unison-2.9.1/unison-manual.html#prelim
+	# Unison preferences file
+	# Roots of the synchronization
+	root = C:\Users\SHAKKA~1\eclipsegit\AWSLambdaFunctions
+	root = ssh://i-0f1beb04ee3109b92//home/ubuntu/from_windows/project3
+	servercmd=/home/ubuntu/Tools/unison-v2.51.4_rc2/bin/unison
+
+	auto=true
+	batch=true
+	confirmbigdel=true
+	fastcheck=true
+	group=true
+	owner=true
+	prefer=newer
+	times=true
+
 [ using profile001 ]
 	C:\Users\Shak Kathirvel>c:\Tools\unison-v2.51.4_rc2\bin\unison.exe profile001
 		Unison 2.51.3.70 (ocaml 4.12.0): Contacting server...
