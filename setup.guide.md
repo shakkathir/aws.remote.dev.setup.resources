@@ -49,6 +49,7 @@ ____
 <pre>
 https://github.com/PowerShell/Win32-OpenSSH/releases/OpenSSH-Win64-v8.9.1.0.msi
 After install you should see OpenSSH bins are in location 
+>"C:\WINDOWS\System32\OpenSSH\"
 
 C:\Users\Shak Kathirvel>echo "%path:;="&echo "%"
 	"C:\Program Files (x86)\Common Files\Oracle\Java\javapath"
@@ -90,30 +91,32 @@ C:\Users\Shak Kathirvel>echo "%path:;="&echo "%"
 				2 Dir(s)  905,309,401,088 bytes free
 
 	Generate the ssh keys [ in the windows laptop ].
-	format used = <date>_<account-no>_<region>_<vpcid>_<privatesubnet_id>_<instance_id>.pem
+	format used = &lt;date&gt;_&lt;account-no&gt;_&lt;region&gt;_&lt;vpcid&gt;_&lt;&lt;privatesubnet_id&gt;_&lt;instance_id&gt;.pem
 	C:\Windows\System32\OpenSSH>ssh-keygen.exe
 		Generating public/private rsa key pair.
-		Enter file in which to save the key (C:\Users\Shak Kathirvel/.ssh/id_rsa): C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem
+		Enter file in which to save the key (C:\Users\Shak Kathirvel/.ssh/id_rsa): C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem
 		Enter passphrase (empty for no passphrase):
 		Enter same passphrase again:
-		Your identification has been saved in C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.
-		Your public key has been saved in C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.pub.
+		Your identification has been saved in C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.
+		Your public key has been saved in C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.pub.
+
 </pre>
-5] setup %USER%\.ssh\config for OpenSSH
+### setup %USER%\.ssh\config for OpenSSH
 	https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-getting-started-enable-ssh-connections.html
 		C:\Users\Shak Kathirvel\.ssh\config
 		# SSH over Session Manager
 		Host i-* mi-*
-		    ProxyCommand C:\WINDOWS\system32\WindowsPowerShell\v1.0\PowerShell.exe  "aws ssm start-session --target %h --document-name AWS-StartSSHSession --parameters portNumber=%p --profile 967655172285_ie_dev_AdministratorAccess"
+		    ProxyCommand C:\WINDOWS\system32\WindowsPowerShell\v1.0\PowerShell.exe  "aws ssm start-session --target %h --document-name AWS-StartSSHSession --parameters portNumber=%p --profile 123456789012_ie_dev_AdministratorAccess"
 
 		# SSH over Session Manager [ this article finally helped - https://pub.towardsai.net/how-to-do-remote-development-with-vs-code-using-aws-ssm-415881d249f3]
 		Host i-0f1beb04ee3109b92
-			IdentityFile "C:\Users\Shak Kathirvel\Downloads\2021_may_07_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596.pem"
+			IdentityFile "C:\Users\Shak Kathirvel\Downloads\2021_may_07_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596.pem"
 			User ubuntu
 
 		https://aws.amazon.com/premiumsupport/knowledge-center/systems-manager-ssh-vpc-resources/
+</pre>
 
-[use short form in the next line] ssh -i "C:\Users\Shak Kathirvel\Downloads\2021_may_07_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596.pem" ubuntu@i-0f1beb04ee3109b92		
+[use short form in the next line] ssh -i "C:\Users\Shak Kathirvel\Downloads\2021_may_07_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596.pem" ubuntu@i-0f1beb04ee3109b92		
 
 6] ssh  ubuntu@i-0f1beb04ee3109b92		
 
@@ -183,7 +186,7 @@ s.#remote-dev | 	file perms for .ssh directory and files under it.
 		[refer prereqs: at https://pub.towardsai.net/how-to-do-remote-development-with-vs-code-using-aws-ssm-415881d249f3]
 	- wait for 5+ minutes for ssm service "include" the newly created instance as ssm managed instance
 	- test with either console or aws cli ssm command.
-	- aws ssm start-session --target <instance-id> --profile 967655172285_ie_dev_AdministratorAccess
+	- aws ssm start-session --target <instance-id> --profile 123456789012_ie_dev_AdministratorAccess
 		[debugging references ]
 		https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-troubleshooting.html#plugin-not-found
 			https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html
@@ -203,12 +206,12 @@ s.#remote-dev | 	file perms for .ssh directory and files under it.
 4. C:\Users\Shak Kathirvel\Documents>C:\WINDOWS\System32\OpenSSH\ssh-keygen.exe	
 	[refer prereqs: at https://pub.towardsai.net/how-to-do-remote-development-with-vs-code-using-aws-ssm-415881d249f3]
 5. create the ssh keys file name
-	2021_may_19_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-0114670297365c953.pem
+	2021_may_19_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-0114670297365c953.pem
 	<date>_<accountno>_<account-no>_<us-east-1>_<vpcid>_<privatesubnet>_<instanceid>.pem
-		C:\Users\Shak Kathirvel\Documents\2021_may_19_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-0114670297365c953.pem
-		C:\Users\Shak Kathirvel\Documents\2021_may_19_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-0114670297365c953.pub
+		C:\Users\Shak Kathirvel\Documents\2021_may_19_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-0114670297365c953.pem
+		C:\Users\Shak Kathirvel\Documents\2021_may_19_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-0114670297365c953.pub
 6. copy the pubfile contents to the remote machine /home/ubunutu/.ssh/authorized_keys
-	- aws ssm start-session --target i-0114670297365c953 --profile 967655172285_ie_dev_AdministratorAccess
+	- aws ssm start-session --target i-0114670297365c953 --profile 123456789012_ie_dev_AdministratorAccess
 	- ssm-user@ip-10-239-4-163:/var/snap/amazon-ssm-agent/3552$ sudo ls -haltF /home/ubuntu/.ssh/
 		total 12K
 		drwxr-xr-x 4 ubuntu ubuntu 4.0K May 20 00:27 ../
@@ -225,7 +228,7 @@ s.#remote-dev | 	file perms for .ssh directory and files under it.
 		-rw------- 1 ubuntu ubuntu  411 May 20 00:04 authorized_key	
 8. ssh  ubuntu@	i-0114670297365c953	
 	ubuntu@ip-10-239-4-163:~$ tree -hftpaDu  ~
-	/home/ubuntu/.vscode-server/data/User/workspaceStorage/4dde2be01a51f59aa395c55c9798d27e/acc=967655172285.code-workspace
+	/home/ubuntu/.vscode-server/data/User/workspaceStorage/4dde2be01a51f59aa395c55c9798d27e/acc=123456789012.code-workspace
 ---
 e.#remote-dev | 	file perms for .ssh directory and files under it.
 ______________
@@ -445,8 +448,8 @@ ______________
 
 2. Generate the ssh keys [ in the windows laptop ].
 	<date>_<accountno>_<account-no>_<us-east-1>_<vpcid>_<privatesubnet>_<instanceid>.pem
-		C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem
-		C:\Users\Shak Kathirvel\Documents\2021_may_19_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pub
+		C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem
+		C:\Users\Shak Kathirvel\Documents\2021_may_19_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pub
 
 	C:\Users\Shak Kathirvel>echo "%path:;="&echo "%"
 			"C:\Program Files (x86)\Common Files\Oracle\Java\javapath"
@@ -499,17 +502,17 @@ ______________
 
 		C:\Windows\System32\OpenSSH>ssh-keygen.exe
 			Generating public/private rsa key pair.
-			Enter file in which to save the key (C:\Users\Shak Kathirvel/.ssh/id_rsa): C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem
+			Enter file in which to save the key (C:\Users\Shak Kathirvel/.ssh/id_rsa): C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem
 			Enter passphrase (empty for no passphrase):
 			Enter same passphrase again:
-			Your identification has been saved in C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.
-			Your public key has been saved in C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.pub.
+			Your identification has been saved in C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.
+			Your public key has been saved in C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.pub.
 
 3. copy the pubfile contents from the windows laptop to the new remote machine /home/ubunutu/.ssh/authorized_keys
 	cut and paste the .pub file contents.
-		from C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.pub
+		from C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.pub
 		to new remote machine /home/ubunutu/.ssh/authorized_keys
-	- aws ssm start-session --target i-0114670297365c953 --profile 967655172285_ie_dev_AdministratorAccess [ in windows laptop]
+	- aws ssm start-session --target i-0114670297365c953 --profile 123456789012_ie_dev_AdministratorAccess [ in windows laptop]
 	Starting session with SessionId: shak.kathirvel.ctr@tri.global-021bc569eadcb0e60
 		$ bash
 		ssm-user@ip-10-239-4-174:/var/snap/amazon-ssm-agent/4046$ ls -haltF  [ssm-agent home dir]
@@ -550,26 +553,26 @@ ______________
 exit
 
 6. update the new instance in OpenSSH config file =  C:\Users\Shak Kathirvel\.ssh\config
-	#SSH over Session Manager 967655172285_ie_dev_AdministratorAccess
+	#SSH over Session Manager 123456789012_ie_dev_AdministratorAccess
 	Host i-* mi-*
-		ProxyCommand C:\WINDOWS\system32\WindowsPowerShell\v1.0\PowerShell.exe  "aws ssm start-session  --profile 967655172285_ie_dev_AdministratorAccess --target %h --document-name AWS-StartSSHSession --parameters portNumber=%p"
+		ProxyCommand C:\WINDOWS\system32\WindowsPowerShell\v1.0\PowerShell.exe  "aws ssm start-session  --profile 123456789012_ie_dev_AdministratorAccess --target %h --document-name AWS-StartSSHSession --parameters portNumber=%p"
 
 	6.1 [comment out this instance]
-	# SSH over Session Manager 967655172285_ie_dev_AdministratorAccess |  ssm host=i-0f1beb04ee3109b92
+	# SSH over Session Manager 123456789012_ie_dev_AdministratorAccess |  ssm host=i-0f1beb04ee3109b92
 	#Host i-0f1beb04ee3109b92
-	#	IdentityFile "C:\Users\Shak Kathirvel\Downloads\2021_may_07_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596.pem"
+	#	IdentityFile "C:\Users\Shak Kathirvel\Downloads\2021_may_07_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596.pem"
 	#	User ubuntu
 		
 	6.2 [comment out this instance]
-	# SSH over Session Manager 967655172285_ie_dev_AdministratorAccess |  ssm host=i-0114670297365c953
+	# SSH over Session Manager 123456789012_ie_dev_AdministratorAccess |  ssm host=i-0114670297365c953
 	#Host i-0114670297365c953
-	#	IdentityFile "C:\Users\Shak Kathirvel\Documents\2021_may_19_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-0114670297365c953.pem"
+	#	IdentityFile "C:\Users\Shak Kathirvel\Documents\2021_may_19_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-0114670297365c953.pem"
 	#	User ubuntu	
 
 	6.3 [add this new instance]
-	# SSH over Session Manager 967655172285_ie_dev_AdministratorAccess |  ssm host=i-05435d54cc10051ce
+	# SSH over Session Manager 123456789012_ie_dev_AdministratorAccess |  ssm host=i-05435d54cc10051ce
 	Host i-05435d54cc10051ce
-		IdentityFile "C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem"
+		IdentityFile "C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem"
 		User ubuntu	
 
 7. login into ssh  ubuntu@i-05435d54cc10051ce	[ in windows laptop]
