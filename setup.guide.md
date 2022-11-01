@@ -31,10 +31,10 @@
 		aws configure list
 		aws configure list-profiles
 		aws --profile 123456789012_shak_dev_AdministratorAccess sts get-caller-identity
-		aws --profile 123456789012_shak_dev__AdministratorAccess s3api list-buckets  
---summarize --page-size 1 
+		aws --profile 123456789012_shak_dev__AdministratorAccess s3api list-buckets --summarize --page-size 1 
 	
 ###  OpenSSH toolset setup
+<pre>
 https://github.com/PowerShell/Win32-OpenSSH/releases/OpenSSH-Win64-v8.9.1.0.msi
 After install you should see OpenSSH bins are in location 
 
@@ -86,6 +86,7 @@ C:\Windows\System32\OpenSSH>ssh-keygen.exe
 	Enter same passphrase again:
 	Your identification has been saved in C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.
 	Your public key has been saved in C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.pub.
+</pre>
 5] setup %USER%\.ssh\config for OpenSSH
 	https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-getting-started-enable-ssh-connections.html
 		C:\Users\Shak Kathirvel\.ssh\config
