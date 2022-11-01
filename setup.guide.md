@@ -13,7 +13,7 @@ The network configuration that will be used is represented below:
 ![SSH OVER ssm manager image](/network.diag1.png "Network setup 1 ")
 ![SSH OVER ssm manager image](/network.diag2.png "Network setup 2 ")
 
-> Important this network config makes sure that the ec2 instance in the private subnet has **full network visiblity** to the AWS public service **ssm.us-east-1.amazonaws.com**
+> Important this network config makes sure that the ec2 instance in the private subnet has **full network visiblity** to the AWS public service **ssm.us-east-1.amazonaws.com** . This is requirement to register your instance w/ AWS System Manager Session Manager
 
 ## Part 1
 ### Local Laptop Setup 
@@ -51,9 +51,9 @@ The network configuration that will be used is represented below:
 
 ### remote setup in AWS account
 
-> Important : Make sure the IAM role you attach to the ec2 instance ( as instance profile)  contains **AmazonSSMManagedInstanceCore**  canned policy
+> Important : Make sure the IAM role you attach to the ec2 instance ( as instance profile)  contains **AmazonSSMManagedInstanceCore**  canned policy. This is requirement to register your instance w/ AWS System Manager Session Manager
 
-	1. created new *ec2 instance* in the acc/region/vpc/subnet(private) = account/us-east-1/vpc-0cd3bba277ee01b95/subnet-014c0958ede34e596
+	1. created new *ec2 instance* in the acc/region/vpc/subnet(private) = your aws account/us-east-1/vpc-0cd3bba277ee01b95/subnet-014c0958ede34e596
 		choose OS
 			ubuntu@ip-10-239-4-163:~$ lsb_release -a
 			No LSB modules are available.
@@ -77,7 +77,7 @@ The network configuration that will be used is represented below:
 ____
 
 ## Part 2
-  * SSH over SSM
+   ** <span style="color:blue">.SSH over SSM</span> **
 ###  OpenSSH toolset setup
 
 https://github.com/PowerShell/Win32-OpenSSH/releases/OpenSSH-Win64-v8.9.1.0.msi
