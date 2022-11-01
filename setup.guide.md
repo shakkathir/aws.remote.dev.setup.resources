@@ -5,13 +5,15 @@
 ![SSH OVER ssm manager image](/SSH_OVER_ssm_manager.jpg "SSH OVER ssm manager image")
 
 ### Network Configuration
-Before creating the EC2 instance you will need a VPC with a Public and Private Subnets. Since  your dev ec2 instance will be running in the Private Subnet, it will need public internet access internet so that we can install and update dev tool chains).
+  Before creating the EC2 instance you will need a VPC with a Public and Private Subnets. Since  your dev ec2 instance will be running in the **private subnet**, it will need public internet access internet so that we can install and update dev tool chains).
 
-In order to give access to the public internet to our private subnet we will be using a NAT Gateway. In addition, it makes sure that the outside client doesn’t initiate a connection with the instance.
+   In order to give access to the public internet access to our private subnet we will be using a NAT Gateway. In addition, it makes sure that the outside client doesn’t initiate a connection with the instance.
+
+  Create the following network resources manually after logging into  GUI console 
 
   1. Create a NAT Gateway in the public subnet
   2. Assign an elastic IP to the NAT Gateway
-  3. Update the routing table attached to the private subnet to route the public traffic to NAT gateway.
+  3. Update the **routing table attached to the private subnet** ( where dev ec2 instance is hosted) to route the public traffic to NAT gateway.
 
 The network configuration that will be used is represented below:
 ![SSH OVER ssm manager image](/network.diag1.png "Network setup 1 ")
@@ -57,6 +59,10 @@ The network configuration that will be used is represented below:
 
 > Important : Make sure the IAM role you attach to the ec2 instance ( as instance profile)  contains **AmazonSSMManagedInstanceCore**  canned policy. This is requirement to register your instance w/ AWS System Manager Session Manager
 
+> Important : Make sure that you **disable public IPs assignments** to the ec2 instances.
+
+> Important : Make sure that Security group you attach to the ec2 instance has **empty inbound rules.**
+
 	1. created new *ec2 instance* in the acc/region/vpc/subnet(private) = your aws account/us-east-1/vpc-0cd3bba277ee01b95/subnet-014c0958ede34e596
 		choose OS
 			ubuntu@ip-10-239-4-163:~$ lsb_release -a
@@ -73,15 +79,15 @@ The network configuration that will be used is represented below:
 			inbound empty
 			outbound all 
 		Choose No keys [ we will generate the keys seperately ]
-			* Note down the instance = i-05435d54cc10051ce	 
+			* Note down the instance = i-05435d54cc10051ce	( for example) 
 
-### Test the remote session using ssm
-	aws --profile 123456789012_shak_dev_AdministratorAccess ssm start-session --target  i-0f1beb04ee3109b92 
+### Test the remote session using ssm at local machine command prompt
+	aws --profile 123456789012_shak_dev_AdministratorAccess ssm start-session --target i-05435d54cc10051ce
 
 ____
 
 ## Part 2
-   ** &lt;span style="color:blue"&gt;SSH over SSM&lt;/span&gt; **
+### SSH over SSM
 ###  OpenSSH toolset setup
 
 https://github.com/PowerShell/Win32-OpenSSH/releases/OpenSSH-Win64-v8.9.1.0.msi
@@ -129,6 +135,9 @@ After install you should see OpenSSH bins are in location
 
 	Generate the ssh keys [ in the windows laptop ].
 	format used = &lt;date&gt;_&lt;account-no&gt;_&lt;region&gt;_&lt;vpcid&gt;_&lt;&lt;privatesubnet_id&gt;_&lt;instance_id&gt;.pem
+</pre>
+###  Assymetric SSH Keys generation 
+
 2.	C:\Windows\System32\OpenSSH>ssh-keygen.exe
 		Generating public/private rsa key pair.
 		Enter file in which to save the key (C:\Users\Shak Kathirvel/.ssh/id_rsa): C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem
@@ -137,12 +146,13 @@ After install you should see OpenSSH bins are in location
 		Your identification has been saved in C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.
 		Your public key has been saved in C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.pub.
 
+###  Copy the public key into the instance.
+
 3. copy the pubfile contents from the windows laptop to the new remote machine /home/ubunutu/.ssh/authorized_keys
 	cut and paste the .pub file contents.
 		from C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.pub
 		to new remote machine /home/ubunutu/.ssh/authorized_keys
 	- aws ssm start-session --target i-0114670297365c953 --profile 967655172285_ie_dev_AdministratorAccess [ in windows laptop]
-	Starting session with SessionId: shak.kathirvel.ctr@tri.global-021bc569eadcb0e60
 		$ bash
 		ssm-user@ip-10-239-4-174:/var/snap/amazon-ssm-agent/4046$ ls -haltF  [ssm-agent home dir]
 		total 8.0K
@@ -181,8 +191,8 @@ After install you should see OpenSSH bins are in location
 		ssm-user@ip-10-239-4-174:/var/snap/amazon-ssm-agent/4046$ exit
 exit
 
-</pre>
-### setup %USER%\.ssh\config for OpenSSH
+
+### setup Local Laptop %USER%\.ssh\config for OpenSSH
 	https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-getting-started-enable-ssh-connections.html
 		C:\Users\Shak Kathirvel\.ssh\config
 		# SSH over Session Manager
@@ -197,16 +207,15 @@ exit
 		https://aws.amazon.com/premiumsupport/knowledge-center/systems-manager-ssh-vpc-resources/
 </pre>
 
-[use short form in the next line] ssh -i "C:\Users\Shak Kathirvel\Downloads\2021_may_07_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596.pem" ubuntu@i-0f1beb04ee3109b92		
-
 6] ssh  ubuntu@i-0f1beb04ee3109b92		
 
-7] scp commands
+____
+
+## Part 3
+### Copy files between Local Laptop and remote machine using SCP
+### scp commands
 	[scp recursive copy]  https://www.webtiara.com/how-to-use-ssh-and-scp-windows-10-file-folder-upload/
 		scp -r "C:\Users\Shak Kathirvel\Documents\shak.at.hotmail.com.gitroot\aws.code.root\example001"  i-0f1beb04ee3109b92:/home/ubuntu/from_windows/project2
-
-	[dont use ] rsync -avh -e ssh /source/path/ host:/destination/path [from https://unix.stackexchange.com/questions/105140/how-to-copy-only-new-files-using-scp-command]
-	[dont use ] C:\Tools\cwrsync_6.2.1_x64\bin\rsync.exe -avuzh -e ssh -F "C:\Users\config" example002/ i-0f1beb04ee3109b92:/home/ubuntu/from_windows/project1
 
 	[scp recurisve copy based on date ]
 	cd "C:\Users\Shak Kathirvel\Documents\shak.at.hotmail.com.gitroot\aws.code.root\"
@@ -216,19 +225,16 @@ exit
 	"C:\Users\Shak Kathirvel\Documents\shak.at.hotmail.com.gitroot"
 	forfiles /P aws.code.root\vpc_logs_analysis_with_athena /M *.py /S /D +03/13/2020 /c "cmd /c scp @file  i-0f1beb04ee3109b92:/home/ubuntu/from_windows/project2"
 
-8]  linux tree command.
-	ubuntu@ip-10-239-4-181:~$ tree -hfatDU  `pwd`/from_windows/
-e.#remote-dev | linux or windows latest CLI setup.
-______________
-s.#remote-dev | linux or windows latest CLI VERIFICATION 
-aws s3api list-buckets --profile 929292782238_tri-na_AdministratorAccess
-	aws s3 ls s3://mmt-test --human-readable --summarize --page-size 1 --profile 929292782238_tri-na_AdministratorAccess
-e.#remote-dev | linux or windows latest CLI VERIFICATION 	
-______________
-s.#remote-dev  | SCP  command for copying multiple file filter with date filters. 
-[scp]
-forfiles /P "C:\Users\Shak Kathirvel\Downloads" /M *.tar.gz /S /D +05/01/2021 /c "cmd /c scp @file  i-0f1beb04ee3109b92:/home/ubuntu/from_windows/project2
+	[scp recurisve copy based on file filters and date]
+	forfiles /P "C:\Users\Shak Kathirvel\Downloads" /M *.tar.gz /S /D +05/01/2021 /c "cmd /c scp @file  i-0f1beb04ee3109b92:/home/ubuntu/from_windows/project2
 
+  	linux tree command.
+	ubuntu@ip-10-239-4-181:~$ tree -hfatDU  `pwd`/from_windows/
+
+	[dont use ] rsync -avh -e ssh /source/path/ host:/destination/path [from https://unix.stackexchange.com/questions/105140/how-to-copy-only-new-files-using-scp-command]
+	[dont use ] C:\Tools\cwrsync_6.2.1_x64\bin\rsync.exe -avuzh -e ssh -F "C:\Users\config" example002/ i-0f1beb04ee3109b92:/home/ubuntu/from_windows/project1
+
+### Unision Sync commands [ Only changed files]
 [unison]
 [error| did not work]C:\Tools\unison-v2.51.3\bin\unison.exe "C:\Users\Shak Kathirvel\gitroot\ouroboros-provision\assets" -servercmd /home/ubuntu/Tools/unison-v2.51.3/bin ssh://i-0f1beb04ee3109b92:/home/ubuntu/from_windows/project2
 cd "C:\Users\Shak Kathirvel\Downloads"
@@ -242,78 +248,45 @@ Fatal error: Lost connection with the server
 
 [cause and solution]
 	https://github.com/bcpierce00/unison/issues/166
-___
+
 c:\Tools\unison-v2.51.4_rc2\bin\unison.exe -testServer delme.json -servercmd /home/ubuntu/Tools/unison-v2.51.4_rc2/bin/unison ssh://i-0f1beb04ee3109b92/home/ubuntu/from_windows/project2/delme.json
-e.#remote-dev  | SCP  command for copying multiple file filter with date filters. 
-______________
-s.#remote-dev | 	file perms for .ssh directory and files under it.
-	ubuntu@ip-10-239-4-163:~$ ls -haltF
-	total 28K
-	drwxr-xr-x 4 ubuntu ubuntu 4.0K May 20 00:05 ./
-	drwx------ 2 ubuntu ubuntu 4.0K May 20 00:05 .cache/
-	drwx------ 2 ubuntu ubuntu 4.0K May 20 00:04 .ssh/   [ perms for .ssh directory
-	drwxr-xr-x 4 root   root   4.0K May 19 23:54 ../
-	-rw-r--r-- 1 ubuntu ubuntu  220 Feb 25  2020 .bash_logout
-	-rw-r--r-- 1 ubuntu ubuntu 3.7K Feb 25  2020 .bashrc
-	-rw-r--r-- 1 ubuntu ubuntu  807 Feb 25  2020 .profile
-	ubuntu@ip-10-239-4-163:~$ ls -haltF .ssh
-	total 12K
-	drwxr-xr-x 4 ubuntu ubuntu 4.0K May 20 00:05 ../
-	drwx------ 2 ubuntu ubuntu 4.0K May 20 00:04 ./
-	-rw------- 1 ubuntu ubuntu  411 May 20 00:04 authorized_key
 
-1. create a temp instance in account-no_us-east-1_vpcid_privatesubnet [<account>/<us-east-1>/<vpc>.<privatesubnet>] with no ssh keys
-	- attach ec2 instance profile role with policy containing **AmazonSSMManagedInstanceCore**
-		[refer prereqs: at https://pub.towardsai.net/how-to-do-remote-development-with-vs-code-using-aws-ssm-415881d249f3]
-	- wait for 5+ minutes for ssm service "include" the newly created instance as ssm managed instance
-	- test with either console or aws cli ssm command.
-	- aws ssm start-session --target <instance-id> --profile 123456789012_ie_dev_AdministratorAccess
-		[debugging references ]
-		https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-troubleshooting.html#plugin-not-found
-			https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html
-			https://s3.amazonaws.com/session-manager-downloads/plugin/latest/windows/SessionManagerPluginSetup.exe
-2. after the instance creation note down the instance number i-XXXXXXXXXXX
-#remote-dev | create ssh key pairs using openssh tools
-3. create the  ssh key pairs. .pem and .pub files by running ssh-keygen in windows cmd line tools.
-	C:\Users\Shak Kathirvel\Documents>echo %PATH% ; echo "%path:;="&echo "%"
-	C:\Users\Shak Kathirvel\Documents>DIR /b/d/s C:\WINDOWS\System32\OpenSSH\
-		C:\WINDOWS\System32\OpenSSH\scp.exe
-		C:\WINDOWS\System32\OpenSSH\sftp.exe
-		C:\WINDOWS\System32\OpenSSH\ssh-add.exe
-		C:\WINDOWS\System32\OpenSSH\ssh-agent.exe
-		C:\WINDOWS\System32\OpenSSH\ssh-keygen.exe
-		C:\WINDOWS\System32\OpenSSH\ssh-keyscan.exe
-		C:\WINDOWS\System32\OpenSSH\ssh.exe
-4. C:\Users\Shak Kathirvel\Documents>C:\WINDOWS\System32\OpenSSH\ssh-keygen.exe	
-	[refer prereqs: at https://pub.towardsai.net/how-to-do-remote-development-with-vs-code-using-aws-ssm-415881d249f3]
-5. create the ssh keys file name
-	2021_may_19_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-0114670297365c953.pem
-	<date>_<accountno>_<account-no>_<us-east-1>_<vpcid>_<privatesubnet>_<instanceid>.pem
-		C:\Users\Shak Kathirvel\Documents\2021_may_19_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-0114670297365c953.pem
-		C:\Users\Shak Kathirvel\Documents\2021_may_19_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-0114670297365c953.pub
-6. copy the pubfile contents to the remote machine /home/ubunutu/.ssh/authorized_keys
-	- aws ssm start-session --target i-0114670297365c953 --profile 123456789012_ie_dev_AdministratorAccess
-	- ssm-user@ip-10-239-4-163:/var/snap/amazon-ssm-agent/3552$ sudo ls -haltF /home/ubuntu/.ssh/
-		total 12K
-		drwxr-xr-x 4 ubuntu ubuntu 4.0K May 20 00:27 ../
-		drwx------ 2 ubuntu ubuntu 4.0K May 20 00:04 ./
-		-rw------- 1 ubuntu ubuntu  411 May 20 00:04 authorized_keys
-	- ssm-user@ip-10-239-4-163:/var/snap/amazon-ssm-agent/3552$ sudo vim /home/ubuntu/.ssh/authorized_keys
-	- cut and paste the .pub file contents.
-7. check the acls [rwx--- for the .ssh dir and .ssh/authorized_keys file]
-	ubuntu@ip-10-239-4-163:~$ ls -haltF
-		total 28K
-		drwx------ 2 ubuntu ubuntu 4.0K May 20 00:04 .ssh/   [ perms for .ssh directory
+[unison] config that works 
+[ using profile001 ]
+	C:\Users\Shak Kathirvel>c:\Tools\unison-v2.51.4_rc2\bin\unison.exe profile001
+		Unison 2.51.3.70 (ocaml 4.12.0): Contacting server...
+		Connected [//X1C-SKathirvel/C:/Users/Shak Kathirvel/eclipsegit/AWSLambdaFunctions -> //ip-10-239-4-181//home/ubuntu/from_windows/project3]
+		Looking for changes
+		  Waiting for changes from server
+		Reconciling changes
+		Nothing to do: replicas have not changed since last sync.
 
-		ubuntu@ip-10-239-4-163:~$ ls -haltF .ssh
-		-rw------- 1 ubuntu ubuntu  411 May 20 00:04 authorized_key	
-8. ssh  ubuntu@	i-0114670297365c953	
-	ubuntu@ip-10-239-4-163:~$ tree -hftpaDu  ~
-	/home/ubuntu/.vscode-server/data/User/workspaceStorage/4dde2be01a51f59aa395c55c9798d27e/acc=123456789012.code-workspace
----
-e.#remote-dev | 	file perms for .ssh directory and files under it.
-______________
-s.#remote-dev |  software needed after the instance creation.
+[using default ]
+	C:\Users\Shak Kathirvel>c:\Tools\unison-v2.51.4_rc2\bin\unison.exe default
+		Unison 2.51.3.70 (ocaml 4.12.0): Contacting server...
+		Connected [//X1C-SKathirvel/C:/Tools/cwrsync_6.2.1_x64 -> //ip-10-239-4-181//home/ubuntu/from_windows/project1]
+		Looking for changes
+		  Waiting for changes from server
+		Reconciling changes
+		Nothing to do: replicas have not changed since last sync.
+
+[ .unison profiles ]		
+	C:\Users\Shak Kathirvel>dir /b/s/d .unison
+	C:\Users\Shak Kathirvel\.unison\ar03fb67
+	C:\Users\Shak Kathirvel\.unison\ar51c1b0
+	C:\Users\Shak Kathirvel\.unison\default.prf
+	C:\Users\Shak Kathirvel\.unison\fp03fb67
+	C:\Users\Shak Kathirvel\.unison\fp51c1b0
+	C:\Users\Shak Kathirvel\.unison\profile001.prf
+	C:\Users\Shak Kathirvel\.unison\unison.log
+	
+[unison command line - not using profile ] 	
+	for copying single files between remote and windows machine just use scp	
+
+____
+
+## Part 4
+### software needed after the instance creation.
 sudo apt update 
 sudo apt install unzip
 sudo apt install tree
@@ -402,15 +375,6 @@ curl https://pyenv.run | bash
 	update ~/.bashrc
 	pyenv install --list | grep " 3\.[678]"
 e.#remote-dev |  pyenv python instal after the instance creation.	
-______________
-s.#remote-dev |  scp commands
-124224456861 - ML account!
-[scp]
-scp   i-0416aa3c03d5c6392:/home/ubuntu/try1.csv "C:\Users\Shak Kathirvel\Documents\." 
-scp   i-0416aa3c03d5c6392:/home/ubuntu/276724084465-ALL-REGIONS-ALL-subnets.csv "C:\Users\Shak Kathirvel\Documents\." 
-scp   i-0416aa3c03d5c6392:/home/ubuntu/try1.sh "C:\Users\Shak Kathirvel\Documents\." 
-forfiles /P "C:\Users\Shak Kathirvel\Downloads" /M *.tar.gz /S /D +05/01/2021 /c "cmd /c scp @file  i-0f1beb04ee3109b92:/home/ubuntu/from_windows/project2
-e.#remote-dev |  scp commands
 ______________
 s.#remote-dev |  unison setup and usage.
 [unison] config that works 
