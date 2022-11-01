@@ -4,6 +4,7 @@
 ## Overall Architecture 
 ![SSH OVER ssm manager image](/SSH_OVER_ssm_manager.jpg "SSH OVER ssm manager image")
 
+## Part 1
 ### Local Laptop Setup 
 
 #### Install AWS CLI v2 or latest 
@@ -36,7 +37,14 @@
 		aws configure list-profiles
 		aws --profile 123456789012_shak_dev_AdministratorAccess sts get-caller-identity
 		aws --profile 123456789012_shak_dev__AdministratorAccess s3api list-buckets --summarize --page-size 1 
-	
+
+### Test the remote session using ssm
+	aws --profile 123456789012_shak_dev_AdministratorAccess ssm start-session --target  i-0f1beb04ee3109b92 
+
+____
+
+## Part 2
+  * SSH over SSM
 ###  OpenSSH toolset setup
 <pre>
 https://github.com/PowerShell/Win32-OpenSSH/releases/OpenSSH-Win64-v8.9.1.0.msi
@@ -81,15 +89,15 @@ C:\Users\Shak Kathirvel>echo "%path:;="&echo "%"
 				7 File(s)      3,639,808 bytes
 				2 Dir(s)  905,309,401,088 bytes free
 
-Generate the ssh keys [ in the windows laptop ].
-format used = <date>_<account-no>_<region>_<vpcid>_<privatesubnet_id>_<instance_id>.pem
-C:\Windows\System32\OpenSSH>ssh-keygen.exe
-	Generating public/private rsa key pair.
-	Enter file in which to save the key (C:\Users\Shak Kathirvel/.ssh/id_rsa): C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem
-	Enter passphrase (empty for no passphrase):
-	Enter same passphrase again:
-	Your identification has been saved in C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.
-	Your public key has been saved in C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.pub.
+	Generate the ssh keys [ in the windows laptop ].
+	format used = <date>_<account-no>_<region>_<vpcid>_<privatesubnet_id>_<instance_id>.pem
+	C:\Windows\System32\OpenSSH>ssh-keygen.exe
+		Generating public/private rsa key pair.
+		Enter file in which to save the key (C:\Users\Shak Kathirvel/.ssh/id_rsa): C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem
+		Enter passphrase (empty for no passphrase):
+		Enter same passphrase again:
+		Your identification has been saved in C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.
+		Your public key has been saved in C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.pub.
 </pre>
 5] setup %USER%\.ssh\config for OpenSSH
 	https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-getting-started-enable-ssh-connections.html
