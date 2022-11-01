@@ -4,7 +4,7 @@
 ## Overall Architecture 
 ![SSH OVER ssm manager image](/SSH_OVER_ssm_manager.jpg "SSH OVER ssm manager image")
 
-Network Configuration
+### Network Configuration
 Before creating the EC2 instance you will need a VPC with a Public and Private Subnets. Since will be running your dev ec2 instance in the Private Subnet, it will need internet access (so that we can install and update dev tool chains).
 
 In order to give access to the internet to our private subnet we will be using a NAT Gateway. In addition, to enable internet connectivity, this gateway make sure that the internet doesn’t initiate a connection with the instance.
@@ -12,6 +12,9 @@ In order to give access to the internet to our private subnet we will be using a
 The network configuration that will be used is represented below:
 ![SSH OVER ssm manager image](/network.diag1.png "Network setup 1 ")
 ![SSH OVER ssm manager image](/network.diag2.png "Network setup 2 ")
+
+> Important this network config makes sure that the ec2 instance in the private subnet has **full network visiblity** to the AWS public service **ssm.us-east-1.amazonaws.com**
+
 ## Part 1
 ### Local Laptop Setup 
 
@@ -47,6 +50,9 @@ The network configuration that will be used is represented below:
 		aws --profile 123456789012_shak_dev__AdministratorAccess s3api list-buckets --summarize --page-size 1 
 
 ### remote setup in AWS account
+
+> Important : Make sure the IAM role you attach to the ec2 instance ( as instance profile)  contains **AmazonSSMManagedInstanceCore**  canned policy
+
 	1. created new *ec2 instance* in the acc/region/vpc/subnet(private) = account/us-east-1/vpc-0cd3bba277ee01b95/subnet-014c0958ede34e596
 		choose OS
 			ubuntu@ip-10-239-4-163:~$ lsb_release -a
@@ -58,7 +64,7 @@ The network configuration that will be used is represented below:
 		Choose VM 
 			t2.2xlarge = 8vCPUs x 32GiB	
 		Choose instance profile
-			a role that contains **AmazonSSMManagedInstanceCore**
+			a role that contains **AmazonSSMManagedInstanceCore**  canned policy
 		Choose security group
 			inbound empty
 			outbound all 
@@ -73,12 +79,12 @@ ____
 ## Part 2
   * SSH over SSM
 ###  OpenSSH toolset setup
-<pre>
+
 https://github.com/PowerShell/Win32-OpenSSH/releases/OpenSSH-Win64-v8.9.1.0.msi
 After install you should see OpenSSH bins are in location 
 > "C:\WINDOWS\System32\OpenSSH\"
-
-> C:\Users\Shak Kathirvel>echo "%path:;="&echo "%"
+<pre>
+1. C:\Users\Shak Kathirvel>echo "%path:;="&echo "%"
 	"C:\Program Files (x86)\Common Files\Oracle\Java\javapath"
 	"C:\amazon-corretto-8.232.09.1\jdk1.8.0_232\bin"
 	"C:\WINDOWS\system32"
@@ -119,7 +125,7 @@ After install you should see OpenSSH bins are in location
 
 	Generate the ssh keys [ in the windows laptop ].
 	format used = &lt;date&gt;_&lt;account-no&gt;_&lt;region&gt;_&lt;vpcid&gt;_&lt;&lt;privatesubnet_id&gt;_&lt;instance_id&gt;.pem
-	C:\Windows\System32\OpenSSH>ssh-keygen.exe
+2.	C:\Windows\System32\OpenSSH>ssh-keygen.exe
 		Generating public/private rsa key pair.
 		Enter file in which to save the key (C:\Users\Shak Kathirvel/.ssh/id_rsa): C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem
 		Enter passphrase (empty for no passphrase):
