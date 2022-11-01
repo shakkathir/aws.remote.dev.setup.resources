@@ -4,6 +4,14 @@
 ## Overall Architecture 
 ![SSH OVER ssm manager image](/SSH_OVER_ssm_manager.jpg "SSH OVER ssm manager image")
 
+Network Configuration
+Before creating the EC2 instance you will need a VPC with a Public and Private Subnets. Since will be running your dev ec2 instance in the Private Subnet, it will need internet access (so that we can install and update dev tool chains).
+
+In order to give access to the internet to our private subnet we will be using a NAT Gateway. In addition, to enable internet connectivity, this gateway make sure that the internet doesn’t initiate a connection with the instance.
+
+The network configuration that will be used is represented below:
+![SSH OVER ssm manager image](/network.diag1.png "Network setup 1 ")
+![SSH OVER ssm manager image](/network.diag2.png "Network setup 2 ")
 ## Part 1
 ### Local Laptop Setup 
 
