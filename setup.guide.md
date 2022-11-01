@@ -13,10 +13,11 @@
 		sudo ./aws/install
 
 #### Install AWS CLI Session Manager plugin in for windows
+	[windows]
 	https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-troubleshooting.html#plugin-not-found
 		https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html
 			https://s3.amazonaws.com/session-manager-downloads/plugin/latest/windows/SessionManagerPluginSetup.exe
-### Steps
+### AWS Creds Setup
 		0] login to SSO managemnt console.
 
 		1] collect the temp creds in sso login page to
@@ -33,20 +34,66 @@
 			aws --profile 929292782238_tri-na_AdministratorAccess s3api list-buckets  
 			aws --profile 967655172285_ie_dev_AdministratorAccess s3 ls s3://tri-s3-encryption-report  --human-readable --summarize --page-size 1 
 	
+###  OpenSSH toolset setup
+	https://github.com/PowerShell/Win32-OpenSSH/releases/OpenSSH-Win64-v8.9.1.0.msi
+	After install you should see OpenSSH bins are in location 
 
-2] create a temp instance in account.us-east-1.vpc.privatesubnet
-	2.1] generate a pem file.
+	C:\Users\Shak Kathirvel>echo "%path:;="&echo "%"
+			"C:\Program Files (x86)\Common Files\Oracle\Java\javapath"
+			"C:\amazon-corretto-8.232.09.1\jdk1.8.0_232\bin"
+			"C:\WINDOWS\system32"
+			"C:\WINDOWS"
+			"C:\WINDOWS\System32\Wbem"
+			"C:\WINDOWS\System32\WindowsPowerShell\v1.0\"
+			**"C:\WINDOWS\System32\OpenSSH\"**
+			"C:\Program Files\PuTTY\"
+			"C:\Program Files (x86)\WinMerge"
+			"C:\Program Files\Intel\WiFi\bin\"
+			"C:\Program Files\Common Files\Intel\WirelessCommon\"
+			"C:\Program Files\WinMerge"
+			"c:\java-se-8u40-ri\bin\"
+			"C:\Program Files\Git2.26.0\cmd"
+			"C:\AWS_SAM_CLI_64_PY3\bin\"
+			"C:\AWSCLIV2\"
+			"C:\Program Files\Amazon\SessionManagerPlugin\bin\"
+			"C:\Program Files\Docker\Docker\resources\bin"
+			"C:\ProgramData\DockerDesktop\version-bin"
+			"C:\Users\Shak Kathirvel\.pyenv\pyenv-win\bin"
+			"C:\Users\Shak Kathirvel\.pyenv\pyenv-win\shims"
+			"C:\Users\Shak Kathirvel\AppData\Local\Programs\Python\Python38-32\Scripts\"
+			"C:\Users\Shak Kathirvel\AppData\Local\Programs\Python\Python38-32\"
+			"C:\Users\Shak Kathirvel\AppData\Local\Microsoft\WindowsApps"
+			"c:\java-se-8u40-ri\bin\"
+			"C:\Users\Shak Kathirvel\AppData\Local\GitHubDesktop\bin"
+			"C:\Users\Shak Kathirvel\AppData\Local\Programs\Microsoft VS Code\bin"
+			"C:\Users\Shak Kathirvel\AppData\Local\hyper\app-3.0.2\resources\bin"
 
-3] pem key file name = 2021_may_07_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596
-	"C:\Users\Shak Kathirvel\Downloads\2021_may_07_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596.pem"
-	 	
-967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-
-4] test the remote session using ssm
-aws ssm start-session --target  i-0f1beb04ee3109b92 --profile 967655172285_ie_dev_AdministratorAccess
-	https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-troubleshooting.html#plugin-not-found
-		https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html
-			https://s3.amazonaws.com/session-manager-downloads/plugin/latest/windows/SessionManagerPluginSetup.exe
+			C:\Users\Shak Kathirvel>cd "C:\WINDOWS\System32\OpenSSH\"
+			C:\Windows\System32\OpenSSH>dir
+			Volume in drive C is Windows
+			Volume Serial Number is 1488-438D
 
+			Directory of C:\Windows\System32\OpenSSH
+
+			03/19/2019  01:21 AM    <DIR>          .
+			03/19/2019  01:21 AM    <DIR>          ..
+			03/19/2019  01:21 AM           322,560 scp.exe
+			03/19/2019  01:21 AM           390,144 sftp.exe
+			03/19/2019  01:21 AM           491,520 ssh-add.exe
+			03/19/2019  01:21 AM           384,512 ssh-agent.exe
+			03/19/2019  01:21 AM           637,952 ssh-keygen.exe
+			03/19/2019  01:21 AM           530,432 ssh-keyscan.exe
+			03/19/2019  01:21 AM           882,688 ssh.exe
+						7 File(s)      3,639,808 bytes
+						2 Dir(s)  905,309,401,088 bytes free
+
+		C:\Windows\System32\OpenSSH>ssh-keygen.exe
+			Generating public/private rsa key pair.
+			Enter file in which to save the key (C:\Users\Shak Kathirvel/.ssh/id_rsa): C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem
+			Enter passphrase (empty for no passphrase):
+			Enter same passphrase again:
+			Your identification has been saved in C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.
+			Your public key has been saved in C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.pub.
 5] setup %USER%\.ssh\config for OpenSSH
 	https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-getting-started-enable-ssh-connections.html
 		C:\Users\Shak Kathirvel\.ssh\config
