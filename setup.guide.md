@@ -1,6 +1,6 @@
-## install notes created on 11/10/2021 creating a new machine in TRI IE-dev account 
+### install notes created on 11/10/2021 creating a new machine in TRI IE-dev account 
 
-## Local Laptop Setup 
+### Local Laptop Setup 
 ### Install AWS CLI v2 or latest 
 [windows]
 update aws CLI https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-windows.html
