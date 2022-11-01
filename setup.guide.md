@@ -1,7 +1,8 @@
 ## Install notes created on 11/10/2021 creating a new machine in TRI IE-dev account 
 
 ### Local Laptop Setup 
-	### Install AWS CLI v2 or latest 
+
+#### Install AWS CLI v2 or latest 
 	[windows]
 	update aws CLI https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-windows.html
 		msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi
@@ -11,7 +12,11 @@
 		unzip awscliv2.zip
 		sudo ./aws/install
 
-	## Steps
+#### Install AWS CLI Session Manager plugin in for windows
+	https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-troubleshooting.html#plugin-not-found
+		https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html
+			https://s3.amazonaws.com/session-manager-downloads/plugin/latest/windows/SessionManagerPluginSetup.exe
+### Steps
 		0] login to SSO managemnt console.
 
 		1] collect the temp creds in sso login page to
