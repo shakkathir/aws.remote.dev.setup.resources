@@ -2,7 +2,7 @@
 ## Install notes Updated on 2022-11-01
 
 ## Overall Architecture 
-![SSH OVER ssm manager image](/SSH OVER ssm manager (3).jpg "SSH OVER ssm manager image")
+![SSH OVER ssm manager image](/SSH_OVER_ssm_manager.jpg "SSH OVER ssm manager image")
 
 ### Local Laptop Setup 
 
