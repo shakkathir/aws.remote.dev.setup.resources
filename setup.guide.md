@@ -38,6 +38,25 @@
 		aws --profile 123456789012_shak_dev_AdministratorAccess sts get-caller-identity
 		aws --profile 123456789012_shak_dev__AdministratorAccess s3api list-buckets --summarize --page-size 1 
 
+### remote setup in AWS account
+	1. created new *ec2 instance* in the acc/region/vpc/subnet(private) = account/us-east-1/vpc-0cd3bba277ee01b95/subnet-014c0958ede34e596
+		choose OS
+			ubuntu@ip-10-239-4-163:~$ lsb_release -a
+			No LSB modules are available.
+			Distributor ID: Ubuntu
+			Description:    Ubuntu 20.04.2 LTS
+			Release:        20.04
+			Codename:       focal
+		Choose VM 
+			t2.2xlarge = 8vCPUs x 32GiB	
+		Choose instance profile
+			a role that contains **AmazonSSMManagedInstanceCore**
+		Choose security group
+			inbound empty
+			outbound all 
+		Choose No keys [ we will generate the keys seperately ]
+			* Note down the instance = i-05435d54cc10051ce	 
+
 ### Test the remote session using ssm
 	aws --profile 123456789012_shak_dev_AdministratorAccess ssm start-session --target  i-0f1beb04ee3109b92 
 
@@ -49,9 +68,9 @@ ____
 <pre>
 https://github.com/PowerShell/Win32-OpenSSH/releases/OpenSSH-Win64-v8.9.1.0.msi
 After install you should see OpenSSH bins are in location 
->"C:\WINDOWS\System32\OpenSSH\"
+> "C:\WINDOWS\System32\OpenSSH\"
 
-C:\Users\Shak Kathirvel>echo "%path:;="&echo "%"
+> C:\Users\Shak Kathirvel>echo "%path:;="&echo "%"
 	"C:\Program Files (x86)\Common Files\Oracle\Java\javapath"
 	"C:\amazon-corretto-8.232.09.1\jdk1.8.0_232\bin"
 	"C:\WINDOWS\system32"
@@ -99,6 +118,50 @@ C:\Users\Shak Kathirvel>echo "%path:;="&echo "%"
 		Enter same passphrase again:
 		Your identification has been saved in C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.
 		Your public key has been saved in C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_123456789012_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.pub.
+
+3. copy the pubfile contents from the windows laptop to the new remote machine /home/ubunutu/.ssh/authorized_keys
+	cut and paste the .pub file contents.
+		from C:\Users\Shak Kathirvel\Documents\2021_nov_11_iedev_967655172285_us-east-1_vpc-0cd3bba277ee01b95_subnet-014c0958ede34e596_i-05435d54cc10051ce.pem.pub
+		to new remote machine /home/ubunutu/.ssh/authorized_keys
+	- aws ssm start-session --target i-0114670297365c953 --profile 967655172285_ie_dev_AdministratorAccess [ in windows laptop]
+	Starting session with SessionId: shak.kathirvel.ctr@tri.global-021bc569eadcb0e60
+		$ bash
+		ssm-user@ip-10-239-4-174:/var/snap/amazon-ssm-agent/4046$ ls -haltF  [ssm-agent home dir]
+		total 8.0K
+		drwxr-xr-x 5 root root 4.0K Nov 10 01:43 ../
+		drwxr-xr-x 2 root root 4.0K Oct 21 23:29 ./
+		
+		ssm-user@ip-10-239-4-174:/var/snap/amazon-ssm-agent/4046$ sudo ls -haltF /home/ubuntu/.ssh/  [ubuntu home dir]
+		total 8.0K
+		drwx------ 2 ubuntu ubuntu 4.0K Nov  9 17:23 ./
+		drwxr-xr-x 3 ubuntu ubuntu 4.0K Nov  9 17:23 ../
+		-rw------- 1 ubuntu ubuntu    0 Nov  9 17:23 authorized_keys
+		
+		ssm-user@ip-10-239-4-174:/var/snap/amazon-ssm-agent/4046$ sudo vim /home/ubuntu/.ssh/authorized_keys
+		ssm-user@ip-10-239-4-174:/var/snap/amazon-ssm-agent/4046$ sudo vim /home/ubuntu/.ssh/authorized_keys
+		ssm-user@ip-10-239-4-174:/var/snap/amazon-ssm-agent/4046$ sudo ls -haltF /home/ubuntu/.ssh/
+		total 12K
+		drwx------ 2 ubuntu ubuntu 4.0K Nov 10 17:43 ./
+		-rw------- 1 ubuntu ubuntu  411 Nov 10 17:43 authorized_keys
+		drwxr-xr-x 3 ubuntu ubuntu 4.0K Nov  9 17:23 ../
+		
+4. check the acls /home/ubuntu/.ssh dir  [should be rwx---]
+		ssm-user@ip-10-239-4-174:/var/snap/amazon-ssm-agent/4046$ sudo ls -haltF /home/ubuntu/
+		total 24K
+		drwx------ 2 ubuntu ubuntu 4.0K Nov 10 17:43 .ssh/
+		drwxr-xr-x 4 root   root   4.0K Nov  9 17:32 ../
+		drwxr-xr-x 3 ubuntu ubuntu 4.0K Nov  9 17:23 ./
+		-rw-r--r-- 1 ubuntu ubuntu  220 Feb 25  2020 .bash_logout
+		-rw-r--r-- 1 ubuntu ubuntu 3.7K Feb 25  2020 .bashrc
+		-rw-r--r-- 1 ubuntu ubuntu  807 Feb 25  2020 .profile
+5. check the acls /home/ubuntu/.ssh/authorized_keys file	[-rw-------]	
+		ssm-user@ip-10-239-4-174:/var/snap/amazon-ssm-agent/4046$ sudo ls -haltF /home/ubuntu/.ssh
+		total 12K
+		drwx------ 2 ubuntu ubuntu 4.0K Nov 10 17:43 ./
+		-rw------- 1 ubuntu ubuntu  411 Nov 10 17:43 authorized_keys
+		drwxr-xr-x 3 ubuntu ubuntu 4.0K Nov  9 17:23 ../
+		ssm-user@ip-10-239-4-174:/var/snap/amazon-ssm-agent/4046$ exit
+exit
 
 </pre>
 ### setup %USER%\.ssh\config for OpenSSH
