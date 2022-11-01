@@ -1,15 +1,15 @@
 ### install notes created on 11/10/2021 creating a new machine in TRI IE-dev account 
 
 ### Local Laptop Setup 
-### Install AWS CLI v2 or latest 
-[windows]
-update aws CLI https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-windows.html
-	msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi
-[linux]
-https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html
-	curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-	unzip awscliv2.zip
-	sudo ./aws/install
+	### Install AWS CLI v2 or latest 
+	[windows]
+	update aws CLI https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-windows.html
+		msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi
+	[linux]
+	https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html
+		curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+		unzip awscliv2.zip
+		sudo ./aws/install
 
 
 0] login to SSO managemnt console.
