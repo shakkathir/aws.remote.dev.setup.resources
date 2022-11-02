@@ -7,8 +7,8 @@
   * [Part 6](#part-6)
   * [Part 7](#part-7)
 
-## Installation notes created on 11/10/2021 
-## Installation notes Updated on 2022-11-01
+##### `Installation notes created on 11/10/2021` 
+##### `Installation notes Updated on 2022-11-01`
 
 ## Overall Architecture 
 ![SSH OVER ssm manager image](/SSH_OVER_ssm_manager.jpg "SSH OVER ssm manager image")
