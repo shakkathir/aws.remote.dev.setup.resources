@@ -67,7 +67,7 @@ The network configuration that will be used is represented below:
 
 ### Remote setup in AWS account
 
-> Important : Make sure the IAM role you attach to the ec2 instance ( as instance profile)  contains **AmazonSSMManagedInstanceCore**  canned policy. This is requirement to register your instance w/ AWS System Manager Session Manager
+> Important : Make sure the IAM role you attach to the ec2 instance ( as instance profile)  contains ==AmazonSSMManagedInstanceCore==  canned policy. This is requirement to register your instance w/ AWS System Manager Session Manager
 
 > Important : Make sure that you **disable public IPs assignments** to the ec2 instances.
 
@@ -101,7 +101,7 @@ The network configuration that will be used is represented below:
 ____
 
 ## Part 2
-* Connect to remote ec2 instance using SSH tunneling thru AWS System Manager Session Manager
+* Connect to remote ec2 instance using SSH tunneling thru ==AWS System Manager Session Manager==
 ###  OpenSSH toolset setup
 
 [OpenSSH Windows 64 bit binary](https://github.com/PowerShell/Win32-OpenSSH/releases/OpenSSH-Win64-v8.9.1.0.msi)
