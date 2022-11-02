@@ -1,5 +1,13 @@
-## Install notes created on 11/10/2021 
-## Install notes Updated on 2022-11-01
+# SSH OVER AWS ssm manager 
+[Part 1](#part-1)
+[Part 2](#part-2)
+[Part 3](#part-3)
+[Part 4](#part-5)
+[Part 5](#part-5)
+[Part 6](#part-6)
+
+## Installation notes created on 11/10/2021 
+## Installation notes Updated on 2022-11-01
 
 ## Overall Architecture 
 ![SSH OVER ssm manager image](/SSH_OVER_ssm_manager.jpg "SSH OVER ssm manager image")
@@ -19,7 +27,7 @@ The network configuration that will be used is represented below:
 ![SSH OVER ssm manager image](/network.diag1.png "Network setup 1 ")
 ![SSH OVER ssm manager image](/network.diag2.png "Network setup 2 ")
 
-> Important this network config makes sure that the ec2 instance in the private subnet has **full network visiblity** to the AWS public service **ssm.us-east-1.amazonaws.com** . This is requirement to register your instance w/ AWS System Manager Session Manager
+> Important:  This network config makes sure that the ec2 instance in the private subnet has **full network visiblity** to the AWS public service **ssm.us-east-1.amazonaws.com** . This is requirement to register your instance w/ AWS System Manager Session Manager
 
 ## Part 1
 ### Local Laptop Setup 
@@ -55,7 +63,7 @@ The network configuration that will be used is represented below:
 		aws --profile 123456789012_shak_dev_AdministratorAccess sts get-caller-identity
 		aws --profile 123456789012_shak_dev__AdministratorAccess s3api list-buckets --summarize --page-size 1 
 
-### remote setup in AWS account
+### Remote setup in AWS account
 
 > Important : Make sure the IAM role you attach to the ec2 instance ( as instance profile)  contains **AmazonSSMManagedInstanceCore**  canned policy. This is requirement to register your instance w/ AWS System Manager Session Manager
 
@@ -90,8 +98,10 @@ ____
 ### SSH over SSM
 ###  OpenSSH toolset setup
 
-https://github.com/PowerShell/Win32-OpenSSH/releases/OpenSSH-Win64-v8.9.1.0.msi
+[OpenSSH Windows 64 bit binary](https://github.com/PowerShell/Win32-OpenSSH/releases/OpenSSH-Win64-v8.9.1.0.msi)
+
 After install you should see OpenSSH bins are in location 
+
 > "C:\WINDOWS\System32\OpenSSH\"
 <pre>
 1. C:\Users\Shak Kathirvel>echo "%path:;="&echo "%"
